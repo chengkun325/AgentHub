@@ -1,18 +1,14 @@
 package com.chengkun.agenthub.controller;
 
-import com.chengkun.agenthub.service.HelloService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloController {
-
-    @Autowired
-    private HelloService helloService;
-
     @RequestMapping("/hello")
-    public String Hello() {
-        return helloService.helloService().toString();
+    @PreAuthorize("hasAuthority('system')")
+    public String hello() {
+        return "hello";
     }
 }
