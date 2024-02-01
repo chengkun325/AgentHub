@@ -61,7 +61,12 @@ public class SecurityConfig {
                 // 返回HttpSecurity，从头开始配置
                 .and()
                 // 开启表单登录，引入表单登录过滤器
-                .formLogin().and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler).and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .formLogin()
+                .and().exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler)
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 //关闭csrf
                 .csrf().disable();
 
