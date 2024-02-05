@@ -1,0 +1,12 @@
+spring:
+  datasource:
+   url: jdbc:mysql://localhost:3306/agent-hub?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+   username: root
+   password: D12138ck
+   driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8080
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
