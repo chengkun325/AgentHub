@@ -16,6 +16,12 @@
     <properties>
         <java.version>17</java.version>
     </properties>
+    <repositories>
+        <repository>
+            <id>baidu-model-sdk</id>
+            <url>https://gitee.com/gitwcx/baidu-model-java-sdk/raw/master/baidu-model-sdk/release/</url>
+        </repository>
+    </repositories>
     <dependencies>
         <!-- Redis-->
         <dependency>
@@ -90,6 +96,12 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20231013</version>
+        </dependency>
+        <!-- Baidu Qianfan SDK-->
+        <dependency>
+            <groupId>com.walter</groupId>
+            <artifactId>baidu-model-sdk</artifactId>
+            <version>0.1.6</version>
         </dependency>
     </dependencies>
 

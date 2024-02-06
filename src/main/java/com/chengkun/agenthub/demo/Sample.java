@@ -5,6 +5,9 @@ import org.json.JSONObject;
 
 import java.io.*;
 
+/**
+ * 百度千帆API调用Demo
+ */
 class Sample {
     public static final String API_KEY = "W16RirSjGTpVFD57dUKlCZCF";
     public static final String SECRET_KEY = "MKRdo1qnWHxuoyKto3hHv0CIuAWegVxw";
