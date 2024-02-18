@@ -1,4 +1,4 @@
-# gpt-chat-robot-vue
+# agenthub-client
 
 ## Project setup
 ```
