@@ -12,7 +12,6 @@ import com.chengkun.agenthub.service.*;
 import com.chengkun.agenthub.util.BeanCopyUtil;
 import com.chengkun.agenthub.util.IpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,9 +28,8 @@ import java.util.stream.Collectors;
 import static com.chengkun.agenthub.constant.CommonConstant.UNKNOWN;
 import static com.chengkun.agenthub.constant.RedisConstant.*;
 
-@Slf4j
-@Component("auroraQuartz")
-public class AuroraQuartz {
+@Component("agenthubQuartz")
+public class AgentHubQuartz {
 
     @Autowired
     private RedisService redisService;
@@ -64,6 +62,9 @@ public class AuroraQuartz {
     @Value("${website.url}")
     private String websiteUrl;
 
+    /**
+     * 保存唯一访问记录到数据库中，统计前一天的唯一访客数。
+     */
     public void saveUniqueView() {
         Long count = redisService.sSize(UNIQUE_VISITOR);
         UniqueView uniqueView = UniqueView.builder()
@@ -73,11 +74,17 @@ public class AuroraQuartz {
         uniqueViewMapper.insert(uniqueView);
     }
 
+    /* 
+     * 清除 Redis 中的唯一访问记录和访客地区记录。
+     */
     public void clear() {
         redisService.del(UNIQUE_VISITOR);
         redisService.del(VISITOR_AREA);
     }
 
+    /* 
+     * 统计用户访问 IP 的省份信息，并存储到 Redis 中。
+     */
     public void statisticalUserArea() {
         Map<String, Long> userAreaMap = userAuthMapper.selectList(new LambdaQueryWrapper<UserAuth>().select(UserAuth::getIpSource))
                 .stream()
@@ -97,6 +104,9 @@ public class AuroraQuartz {
         redisService.set(USER_AREA, JSON.toJSONString(userAreaList));
     }
 
+    /* 
+     * 将网站中的文章链接提交给百度搜索引擎进行 SEO 优化。
+     */
     public void baiduSeo() {
         List<Integer> ids = articleService.list().stream().map(Article::getId).collect(Collectors.toList());
         HttpHeaders headers = new HttpHeaders();
@@ -111,10 +121,16 @@ public class AuroraQuartz {
         });
     }
 
+    /* 
+     * 清理任务执行日志。
+     */
     public void clearJobLogs() {
         jobLogService.cleanJobLogs();
     }
 
+    /* 
+     * 导入 Swagger 文档定义的资源，并为角色分配相关资源。
+     */
     public void importSwagger() {
         resourceService.importSwagger();
         List<Integer> resourceIds = resourceService.list().stream().map(Resource::getId).collect(Collectors.toList());
@@ -128,6 +144,9 @@ public class AuroraQuartz {
         roleResourceService.saveBatch(roleResources);
     }
 
+    /* 
+     * 清空 Elasticsearch 中的数据，然后将数据库中的文章数据导入到 Elasticsearch 中进行搜索。
+     */
     public void importDataIntoES() {
         elasticsearchMapper.deleteAll();
         List<Article> articles = articleService.list();

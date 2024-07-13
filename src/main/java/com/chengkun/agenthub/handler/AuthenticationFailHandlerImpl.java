@@ -15,10 +15,12 @@ import java.io.IOException;
  */
 @Component
 public class AuthenticationFailHandlerImpl implements AuthenticationFailureHandler {
-
-
+    /* 
+     * 当用户尝试登录但认证失败时（例如，提供了错误的用户名或密码），Spring Security 将调用该方法。
+     */
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
+        // 设置响应的内容类型为 JSON 格式
         httpServletResponse.setContentType(CommonConstant.APPLICATION_JSON);
         httpServletResponse.getWriter().write(JSON.toJSONString(ResultVO.fail(e.getMessage())));
     }

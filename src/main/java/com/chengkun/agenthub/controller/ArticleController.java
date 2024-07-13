@@ -20,8 +20,11 @@ import java.util.List;
 
 import static com.chengkun.agenthub.constant.OptTypeConstant.*;
 
-@Api(tags = "文章模块")
-@RestController
+@Api(tags = "文章模块") // 用于Swagger 注解的一部分，用来为类或接口标注描述信息，方便生成 API 文档。给当前类或接口加上标签“文章模块”，以便在 Swagger UI 中分组显示相关的 API。
+// 标记控制器类，自动将方法的返回值转换为 JSON 或 XML：
+// 使用 @RestController 后，控制器类中的每个方法的返回值都会自动转换为 JSON 或 XML 格式
+//（具体取决于请求的 Accept 头），并直接写入到 HTTP 响应体中，而不需要额外使用 @ResponseBody 注解。
+@RestController // 它是 @Controller 和 @ResponseBody 注解的结合。它用于简化开发 RESTful Web 服务。
 public class ArticleController {
 
     @Autowired

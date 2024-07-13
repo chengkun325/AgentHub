@@ -20,6 +20,12 @@ public class UploadStrategyContext {
     @Autowired
     private Map<String, UploadStrategy> uploadStrategyMap;
 
+    /**
+     * @param file
+     * @param path
+     * @return
+     * 根据配置的上传模式选择相应的上传策略，并执行文件上传操作。
+     */
     public String executeUploadStrategy(MultipartFile file, String path) {
         return uploadStrategyMap.get(getStrategy(uploadMode)).uploadFile(file, path);
     }
