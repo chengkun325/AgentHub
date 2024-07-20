@@ -36,11 +36,13 @@ public class NormalArticleImportStrategyImpl implements ArticleImportStrategy {
             log.error(StrUtil.format("导入文章失败, 堆栈:{}", ExceptionUtil.stacktraceToString(e)));
             throw new BizException("导入文章失败");
         }
+        // 将读取到的文章标题和内容封装为 ArticleVO 对象，设置文章状态为草稿状态。
         ArticleVO articleVO = ArticleVO.builder()
                 .articleTitle(articleTitle)
                 .articleContent(articleContent.toString())
                 .status(DRAFT.getStatus())
                 .build();
+        // 保存或更新文章信息。
         articleService.saveOrUpdateArticle(articleVO);
     }
 }

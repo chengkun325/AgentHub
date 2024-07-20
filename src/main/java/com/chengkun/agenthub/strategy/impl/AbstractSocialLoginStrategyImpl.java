@@ -55,20 +55,26 @@ public abstract class AbstractSocialLoginStrategyImpl implements SocialLoginStra
     @Override
     public UserInfoDTO login(String data) {
         UserDetailsDTO userDetailsDTO;
+        // 获取社交登录的令牌信息 socialToken。
         SocialTokenDTO socialToken = getSocialToken(data);
         String ipAddress = IpUtil.getIpAddress(request);
         String ipSource = IpUtil.getIpSource(ipAddress);
+        // 方法根据令牌信息查找用户认证信息。
         UserAuth user = getUserAuth(socialToken);
+        // 找到用户
         if (Objects.nonNull(user)) {
             userDetailsDTO = getUserDetail(user, ipAddress, ipSource);
-        } else {
+        } else {// 未找到
             userDetailsDTO = saveUserDetail(socialToken, ipAddress, ipSource);
         }
+        // 检查用户是否被禁用，若被禁用则抛出异常。
         if (userDetailsDTO.getIsDisable().equals(TRUE)) {
             throw new BizException("用户帐号已被锁定");
         }
+        // 创建身份验证令牌 UsernamePasswordAuthenticationToken 并设置到安全上下文 SecurityContextHolder 中。
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetailsDTO, null, userDetailsDTO.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
+        // 复制用户详细信息到 UserInfoDTO 中，并生成用户的访问令牌。
         UserInfoDTO userInfoDTO = BeanCopyUtil.copyObject(userDetailsDTO, UserInfoDTO.class);
         String token = tokenService.createToken(userDetailsDTO);
         userInfoDTO.setToken(token);

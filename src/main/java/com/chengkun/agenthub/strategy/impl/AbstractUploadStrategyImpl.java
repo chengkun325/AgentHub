@@ -15,12 +15,16 @@ public abstract class AbstractUploadStrategyImpl implements UploadStrategy {
     @Override
     public String uploadFile(MultipartFile file, String path) {
         try {
+            // 首先计算文件的 MD5 值和文件扩展名。
             String md5 = FileUtil.getMd5(file.getInputStream());
             String extName = FileUtil.getExtName(file.getOriginalFilename());
+            // 构建文件名 fileName 为 md5 + extName。
             String fileName = md5 + extName;
+            // 检查文件是否已存在，如果不存在则调用 upload(path, fileName, file.getInputStream()) 方法进行上传。
             if (!exists(path + fileName)) {
                 upload(path, fileName, file.getInputStream());
             }
+            // 通过 getFileAccessUrl(path + fileName) 方法获取URL。
             return getFileAccessUrl(path + fileName);
         } catch (Exception e) {
             e.printStackTrace();

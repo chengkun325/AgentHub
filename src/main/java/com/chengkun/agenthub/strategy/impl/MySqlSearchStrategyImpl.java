@@ -34,6 +34,11 @@ public class MySqlSearchStrategyImpl implements SearchStrategy {
                 .and(i -> i.like(Article::getArticleTitle, keywords)
                         .or()
                         .like(Article::getArticleContent, keywords)));
+        // 对每篇文章进行关键字高亮处理
+        // 判断关键字在文章内容中的位置，根据位置截取内容并替换为带有 PRE_TAG 和 POST_TAG 的高亮标记。
+        // 同样地，对文章标题中的关键字进行高亮处理。
+        // 构建并返回 ArticleSearchDTO 对象列表，其中包含文章的 ID、高亮显示的标题和内容。
+        // 使用 replaceAll() 方法替换文章标题和内容中的关键字，将其替换为带有预定义标记的高亮文本。
         return articles.stream().map(item -> {
                     boolean isLowerCase = true;
                     String articleContent = item.getArticleContent();
